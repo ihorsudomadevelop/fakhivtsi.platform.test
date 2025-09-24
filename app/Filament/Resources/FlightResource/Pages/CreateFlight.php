@@ -28,9 +28,13 @@ class CreateFlight extends CreateRecord
 		} catch (Throwable) {
 			$flightNumber = 1;
 		}
-		$data['date']          = now()->format('Y-m-d');
-		$data['call_sign']     = 'Фахівці';
-		$data['flight_number'] = $flightNumber;
+		$data['date']                = now()->format('Y-m-d');
+		$data['call_sign']           = 'Фахівці';
+		$data['flight_number']       = $flightNumber;
+		$data['drone_serial_number'] = '-';
+		$data['ammunition']          = '-';
+		$data['target_status']       = '-';
+		$data['pilot']               = 'Айтішнік';
 		return static::getModel()::create($data);
 	}
 }

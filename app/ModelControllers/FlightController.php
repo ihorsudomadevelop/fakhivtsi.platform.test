@@ -31,6 +31,10 @@ class FlightController
 		return $this->repo->getLastFlightNumber();
 	}
 
+	/**
+	 * @param string $date
+	 * @return Collection|array
+	 */
 	public function getForDay(string $date): Collection|array
 	{
 		return $this->repo->getForDay($date);

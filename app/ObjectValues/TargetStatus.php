@@ -22,6 +22,8 @@ class TargetStatus
 	public const NOT_AFFECTED_NO_DETONATION = 'Не уражено (без детонації)';
 	/*** @var string */
 	public const NOT_AFFECTED_LOSS_OF_SIDE = 'Не уражено (втрата борта)';
+	/*** @var string */
+	public const MINED = 'Заміновано';
 
 	/*** @return string[] */
 	public static function getList(): array
@@ -34,6 +36,7 @@ class TargetStatus
 			self::NOT_AFFECTED,
 			self::NOT_AFFECTED_NO_DETONATION,
 			self::NOT_AFFECTED_LOSS_OF_SIDE,
+			self::MINED,
 		];
 	}
 }

@@ -27,6 +27,6 @@ class TestCommand extends Command
 	#[NoReturn]
 	public function handle()
 	{
-		dd(flightController()->getForDay('2025-09-11'));
+		dd(flightController()->getLastFlightNumber('2025-09-11'));
 	}
 }

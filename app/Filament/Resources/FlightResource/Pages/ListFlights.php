@@ -3,8 +3,11 @@
 namespace App\Filament\Resources\FlightResource\Pages;
 
 use App\Filament\Resources\FlightResource;
+use Carbon\Carbon;
 use Filament\Actions;
 use Filament\Actions\Action;
+use Filament\Forms;
+use Filament\Forms\Form;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\View\View;
 
@@ -33,6 +36,12 @@ class ListFlights extends ListRecords
 				))
 				->modalSubmitAction(FALSE)
 				->modalCancelActionLabel('Close');
+			//				->form([
+			//					Forms\Components\DatePicker::make('selected_date')
+			//						->label('Дата')
+			//						->default(Carbon::now('Europe/Kyiv')->toDateString())
+			//						->required(),
+			//				])
 		}
 		if (isRoleAdmin()) {
 			$actions[] = Actions\CreateAction::make()

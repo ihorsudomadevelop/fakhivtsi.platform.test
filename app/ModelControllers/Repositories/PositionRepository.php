@@ -13,6 +13,6 @@ class PositionRepository
 	/*** @return array */
 	public function getNameList(): array
 	{
-		return Position::all()->pluck('name')->toArray();
+		return Position::all()->pluck('name', 'name')->toArray();
 	}
 }

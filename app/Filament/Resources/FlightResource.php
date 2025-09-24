@@ -40,7 +40,7 @@ class FlightResource extends Resource
 			->schema([
 				Forms\Components\Select::make('position')
 					->required()
-					->options(array_values(positionController()->getNameList())),
+					->options(positionController()->getNameList()),
 				Forms\Components\Select::make('target')
 					->required()
 					->options(Target::getList()),
