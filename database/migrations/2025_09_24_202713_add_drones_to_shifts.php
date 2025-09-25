@@ -1,6 +1,5 @@
 <?php
 
-use App\ObjectValues\PositionStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,8 +8,8 @@ return new class extends Migration {
 	/*** Run the migrations. */
 	public function up(): void
 	{
-		Schema::table('positions', function(Blueprint $table) {
-			$table->string('status')->after('name')->default(PositionStatus::READY_TO_USE);
+		Schema::table('shifts', function(Blueprint $table) {
+			$table->json('drones')->after('name')->nullable();
 		});
 	}
 };

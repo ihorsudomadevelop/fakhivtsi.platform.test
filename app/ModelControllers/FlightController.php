@@ -32,10 +32,10 @@ class FlightController
 	}
 
 	/**
-	 * @param string $date
+	 * @param string|NULL $date
 	 * @return Collection|array
 	 */
-	public function getForDay(string $date): Collection|array
+	public function getForDay(?string $date = NULL): Collection|array
 	{
 		return $this->repo->getForDay($date);
 	}

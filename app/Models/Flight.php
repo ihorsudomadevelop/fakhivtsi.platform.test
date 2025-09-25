@@ -44,4 +44,7 @@ class Flight extends Model
 		'target_status',
 		'pilot',
 	];
+
+	/*** @var string[] */
+	protected $casts = ['ammunition' => 'array'];
 }

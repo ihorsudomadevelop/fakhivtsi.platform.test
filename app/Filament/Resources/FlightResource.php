@@ -14,9 +14,7 @@ use Filament\Resources\RelationManagers\RelationManagerConfiguration;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class FlightResource
@@ -39,22 +37,27 @@ class FlightResource extends Resource
 		return $form
 			->schema([
 				Forms\Components\Select::make('position')
+					->label('Позиція')
 					->required()
 					->options(positionController()->getNameList()),
 				Forms\Components\Select::make('target')
+					->label('Ціль')
 					->required()
 					->options(Target::getList()),
-				Forms\Components\TextInput::make('coordinates')
+				Forms\Components\Textarea::make('coordinates')
+					->label('Координати (MGRS)')
 					->required(),
-				Forms\Components\Fieldset::make('Flight time')
+				Forms\Components\Fieldset::make('Час польоту')
 					->schema([
 						Forms\Components\TimePicker::make('flight_time_start')
+							->label('Зліт')
 							->required()
 							->format('H:i')
 							->timezone('Europe/Kyiv')
 							->native(FALSE)
 							->seconds(FALSE),
 						Forms\Components\TimePicker::make('flight_time_end')
+							->label('Посадка')
 							->required()
 							->format('H:i')
 							->timezone('Europe/Kyiv')
@@ -62,8 +65,30 @@ class FlightResource extends Resource
 							->seconds(FALSE),
 					]),
 				Forms\Components\Select::make('target_status')
+					->label('Статус по цілі')
 					->required()
-					->options(TargetStatus::getList()),//->visibleOn('edit'),
+					->options(TargetStatus::getList()),
+				Forms\Components\Fieldset::make('БК')
+					->schema([
+						Forms\Components\Repeater::make('ammunition_items')
+							->hiddenLabel()
+							->schema([
+								Forms\Components\Fieldset::make('')
+									->hiddenLabel()
+									->schema([
+										Forms\Components\Select::make('ammunition')
+											->label('Назва')
+											->options(ammunitionController()->getTitleList()),
+										Forms\Components\TextInput::make('quantity')
+											->label('Кількість')
+											->required()
+											->default(1),
+									]),
+							])
+							->addActionLabel('Додати')
+							->columnSpanFull()
+							->collapsible(),
+					]),
 			]);
 	}
 
@@ -85,14 +110,15 @@ class FlightResource extends Resource
 		$bulkActions = [];
 		if (auth()->user()->isPremium()) {
 			$actions[] = Tables\Actions\Action::make('report')
-				->label('Report')
+				->label('Звіт')
 				->icon('heroicon-o-rectangle-stack')
+				->modalHeading('Звіт за виліт')
 				->modalContent(fn($record): View => view(
 					'filament.resources.flight-resource.pages.report-flight',
 					['record' => $record]
 				))
 				->modalSubmitAction(FALSE)
-				->modalCancelActionLabel('Close');
+				->modalCancelAction(FALSE);
 		}
 		if (isRoleAdmin()) {
 			$actions[]     = Tables\Actions\EditAction::make();
@@ -110,10 +136,6 @@ class FlightResource extends Resource
 				Tables\Columns\TextColumn::make('ammunition'),
 			])
 			->filters([
-				//			Filter::make('drone_serial_number')
-				//					->label('Drone Serial Number')
-				//					->form([Forms\Components\TextInput::make('drone_serial_number'),])
-				//					->query(fn(Builder $query): Builder => $query->where('drone_serial_number', '=', '1000035416')),
 			])
 			->actions($actions)
 			->bulkActions($bulkActions);

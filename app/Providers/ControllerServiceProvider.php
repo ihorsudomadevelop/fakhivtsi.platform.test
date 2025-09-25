@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\ModelControllers\AmmunitionController;
 use App\ModelControllers\FlightController;
 use App\ModelControllers\PositionController;
 use Illuminate\Support\ServiceProvider;
@@ -22,5 +23,7 @@ class ControllerServiceProvider extends ServiceProvider
 		$this->app->alias(FlightController::class, 'FlightController');
 		$this->app->singleton(PositionController::class);
 		$this->app->alias(PositionController::class, 'PositionController');
+		$this->app->singleton(AmmunitionController::class);
+		$this->app->alias(AmmunitionController::class, 'AmmunitionController');
 	}
 }

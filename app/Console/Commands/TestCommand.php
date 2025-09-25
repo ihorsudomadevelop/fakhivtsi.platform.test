@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Flight;
 use Illuminate\Console\Command;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -27,6 +28,6 @@ class TestCommand extends Command
 	#[NoReturn]
 	public function handle()
 	{
-		dd(flightController()->getLastFlightNumber('2025-09-11'));
+		dd(flightController()->getLastFlightNumber());
 	}
 }

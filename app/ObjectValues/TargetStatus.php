@@ -29,14 +29,14 @@ class TargetStatus
 	public static function getList(): array
 	{
 		return [
-			self::NA,
-			self::DELIVERED,
-			self::AFFECTED,
-			self::AFFECTED_AFTER_ADJUSTMENT,
-			self::NOT_AFFECTED,
-			self::NOT_AFFECTED_NO_DETONATION,
-			self::NOT_AFFECTED_LOSS_OF_SIDE,
-			self::MINED,
+			self::NA                         => self::NA,
+			self::DELIVERED                  => self::DELIVERED,
+			self::AFFECTED                   => self::AFFECTED,
+			self::AFFECTED_AFTER_ADJUSTMENT  => self::AFFECTED_AFTER_ADJUSTMENT,
+			self::NOT_AFFECTED               => self::NOT_AFFECTED,
+			self::NOT_AFFECTED_NO_DETONATION => self::NOT_AFFECTED_NO_DETONATION,
+			self::NOT_AFFECTED_LOSS_OF_SIDE  => self::NOT_AFFECTED_LOSS_OF_SIDE,
+			self::MINED                      => self::MINED,
 		];
 	}
 }

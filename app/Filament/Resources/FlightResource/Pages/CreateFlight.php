@@ -4,7 +4,6 @@ namespace App\Filament\Resources\FlightResource\Pages;
 
 use App\Filament\Resources\FlightResource;
 use App\Models\Flight;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Throwable;
 
@@ -24,7 +23,10 @@ class CreateFlight extends CreateRecord
 	protected function handleRecordCreation(array $data): Flight
 	{
 		try {
-			$flightNumber = flightController()->getLastFlightNumber() + 1;
+			$flightNumber = flightController()->getLastFlightNumber();
+			if ($flightNumber !== 1) {
+				$flightNumber += 1;
+			}
 		} catch (Throwable) {
 			$flightNumber = 1;
 		}
@@ -32,9 +34,12 @@ class CreateFlight extends CreateRecord
 		$data['call_sign']           = 'Фахівці';
 		$data['flight_number']       = $flightNumber;
 		$data['drone_serial_number'] = '-';
-		$data['ammunition']          = '-';
-		$data['target_status']       = '-';
-		$data['pilot']               = 'Айтішнік';
+		$ammunitionData              = [];
+		foreach ($data['ammunition_items'] as $ammunitionItem) {
+			$ammunitionData[] = ['title' => $ammunitionItem['ammunition'], 'quantity' => $ammunitionItem['quantity']];
+		}
+		$data['ammunition'] = $ammunitionData;
+		$data['pilot']      = 'Айтішнік';
 		return static::getModel()::create($data);
 	}
 }

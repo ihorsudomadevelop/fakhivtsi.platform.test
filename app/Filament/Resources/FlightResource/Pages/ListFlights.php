@@ -6,6 +6,7 @@ use App\Filament\Resources\FlightResource;
 use Carbon\Carbon;
 use Filament\Actions;
 use Filament\Actions\Action;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ListRecords;
@@ -25,26 +26,31 @@ class ListFlights extends ListRecords
 	{
 		$actions = [];
 		if (auth()->user()->isPremium()) {
-			$date      = '2025-09-13';
-			$actions[] = Action::make('report_daily')
-				->label('Daily report')
-				->icon('heroicon-o-rectangle-stack')
-				->modalHeading('Звіт за ' . $date)
-				->modalContent(fn($record): View => view(
-					'filament.resources.flight-resource.pages.report-flight-daily',
-					['date' => $date, 'flights' => flightController()->getForDay($date)]
-				))
-				->modalSubmitAction(FALSE)
-				->modalCancelActionLabel('Close');
-			//				->form([
-			//					Forms\Components\DatePicker::make('selected_date')
-			//						->label('Дата')
-			//						->default(Carbon::now('Europe/Kyiv')->toDateString())
-			//						->required(),
-			//				])
+			$flights = flightController()->getForDay();
+			if ( ! empty($flights->items)) {
+				$actions[] = Action::make('report_daily')
+					->label('Звіт за день')
+					->icon('heroicon-o-rectangle-stack')
+					//				->form([
+					//					Forms\Components\DatePicker::make('selected_date')
+					//						->label('Дата')
+					//						->default(Carbon::now('Europe/Kyiv')->toDateString())
+					//						->live()
+					//						->afterStateUpdated(function(?string $state, ?string $old) {
+					//						}),
+					//				])
+					->modalHeading('Звіт за ' . $flights->first()->date)
+					->modalContent(fn($record): View => view(
+						'filament.resources.flight-resource.pages.report-flight-daily',
+						['date' => $flights->first()->date, 'flights' => $flights]
+					))
+					->modalSubmitAction(FALSE)
+					->modalCancelActionLabel('Close');
+			}
 		}
 		if (isRoleAdmin()) {
 			$actions[] = Actions\CreateAction::make()
+				->label('Додати')
 				->icon('heroicon-o-plus');
 		}
 		return $actions;

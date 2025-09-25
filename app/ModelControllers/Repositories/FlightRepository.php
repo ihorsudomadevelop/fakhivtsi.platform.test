@@ -26,11 +26,15 @@ class FlightRepository
 	}
 
 	/**
-	 * @param string $date
+	 * @param string|NULL $date
 	 * @return Collection|array
 	 */
-	public function getForDay(string $date): Collection|array
+	public function getForDay(?string $date = NULL): Collection|array
 	{
-		return Flight::query()->where('date', $date)->orderBy('flight_number')->get();
+		$date ??= Flight::query()->latest('date')->value('date');
+		return Flight::query()
+			->where('date', $date)
+			->orderBy('flight_number')
+			->get();
 	}
 }
