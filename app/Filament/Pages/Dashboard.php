@@ -15,5 +15,5 @@ class Dashboard extends Page
 	/*** @var string */
 	protected static string $view = 'filament.pages.dashboard';
 	/*** @var string|NULL */
-	protected ?string $heading = 'ФАХІВЦІ';
+	protected ?string $heading = 'ПЛАТФОРМА ДЛЯ ВЕДЕННЯ ОБЛІКУ ТА ЗВІТНОСТІ (BETA TEST)';
 }

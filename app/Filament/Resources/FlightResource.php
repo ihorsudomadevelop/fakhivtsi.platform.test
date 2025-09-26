@@ -28,6 +28,10 @@ class FlightResource extends Resource
 	/*** @var string|NULL */
 	protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+	/*** @var string|NULL */
+	protected static ?string $navigationLabel = 'Польоти';
+
+
 	/**
 	 * @param Form $form
 	 * @return Form
