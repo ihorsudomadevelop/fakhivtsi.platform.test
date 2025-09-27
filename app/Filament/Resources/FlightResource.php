@@ -132,12 +132,12 @@ class FlightResource extends Resource
 		}
 		return $table
 			->columns([
-				Tables\Columns\TextColumn::make('date'),
-				Tables\Columns\TextColumn::make('position'),
-				Tables\Columns\TextColumn::make('flight_number'),
-				Tables\Columns\TextColumn::make('drone_serial_number'),
-				Tables\Columns\TextColumn::make('target'),
-				Tables\Columns\TextColumn::make('ammunition'),
+				Tables\Columns\TextColumn::make('date')->label('Дата'),
+				Tables\Columns\TextColumn::make('position')->label('Позиція'),
+				Tables\Columns\TextColumn::make('flight_number')->label('Номер вильоту'),
+				Tables\Columns\TextColumn::make('drone_serial_number')->label('СН дрону'),
+				Tables\Columns\TextColumn::make('target')->label('Ціль'),
+				Tables\Columns\TextColumn::make('ammunition')->label(''),
 			])
 			->filters([
 			])

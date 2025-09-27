@@ -11,7 +11,11 @@
 			<br>
 			Статус: {{ $record->target_status }}
 			<br>
-			БК: {{ $record->ammunition }}
+			БК:
+			@foreach($record->getAmmunition() as $ammunitionData)
+				{{ $ammunitionData['title'] }} - {{ $ammunitionData['quantity'] . 'шт' }}
+			@endforeach
+
 		</div>
 	</div>
 

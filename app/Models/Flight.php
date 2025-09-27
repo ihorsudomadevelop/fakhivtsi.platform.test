@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string      coordinates
  * @property string      flight_time_start
  * @property string      flight_time_end
- * @property string      ammunition
+ * @property array       ammunition
  * @property string      target_status
  * @property string|NULL impressed
  * @property string      pilot
@@ -47,4 +47,14 @@ class Flight extends Model
 
 	/*** @var string[] */
 	protected $casts = ['ammunition' => 'array'];
+
+	public function getAmmunition(): array
+	{
+		return $this->ammunition;
+	}
+
+	public function setAmmunition(array $ammunition): void
+	{
+		$this->ammunition = $ammunition;
+	}
 }

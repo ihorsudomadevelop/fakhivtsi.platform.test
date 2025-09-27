@@ -8,8 +8,8 @@ return new class extends Migration {
 	/*** Run the migrations. */
 	public function up(): void
 	{
-		Schema::table('flights', function(Blueprint $table) {
-			$table->json('ammunition')->change();
+		Schema::table('shifts', function(Blueprint $table) {
+			$table->date('shift_end_at')->nullable()->change();
 		});
 	}
 };

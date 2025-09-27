@@ -14,6 +14,16 @@ class Shift extends Model
 {
 	use HasFactory;
 
+	/**
+	 * The attributes that are mass assignable.
+	 * @var array<int, string>
+	 */
+	protected $fillable = [
+		'position',
+		'drones',
+		'shift_start_at',
+	];
+
 	/*** @var string[] */
 	protected $casts = ['drones' => 'array'];
 

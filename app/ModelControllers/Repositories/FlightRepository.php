@@ -11,17 +11,20 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class FlightRepository
 {
-	/*** @return int */
-	public function getLastFlightNumber(): int
+	/**
+	 * @param int $positionId
+	 * @return int
+	 */
+	public function getLastFlightNumber(int $positionId): int
 	{
-		$lastDateFlightModel = Flight::whereDate('date', now('Europe/Kyiv')->toDateString())
+		$lastDateFlightModel = Flight::where('position_id', '=', $positionId)
 			->latest('date')
 			->orderByDesc('flight_number')
 			->first();
 		if ($lastDateFlightModel) {
 			return (int) $lastDateFlightModel->flight_number;
 		} else {
-			return 1;
+			return 0;
 		}
 	}
 

@@ -10,9 +10,18 @@ use App\Models\Position;
  */
 class PositionRepository
 {
+	/**
+	 * @param int $id
+	 * @return Position
+	 */
+	public function findById(int $id): Position
+	{
+		return Position::where('id', '=', $id)->first();
+	}
+
 	/*** @return array */
 	public function getNameList(): array
 	{
-		return Position::all()->pluck('name', 'name')->toArray();
+		return Position::all()->pluck('name', 'id')->toArray();
 	}
 }

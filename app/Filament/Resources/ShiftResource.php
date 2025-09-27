@@ -7,7 +7,9 @@ use App\Filament\Resources\ShiftResource\RelationManagers;
 use App\Models\Shift;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\RelationManagers\RelationGroup;
+use Filament\Resources\RelationManagers\RelationManagerConfiguration;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,10 +20,10 @@ use Filament\Tables\Table;
  */
 class ShiftResource extends Resource
 {
-	/*** @var string|null */
+	/*** @var string|NULL */
 	protected static ?string $model = Shift::class;
 
-	/*** @var string|null */
+	/*** @var string|NULL */
 	protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
 	/**
@@ -33,10 +35,30 @@ class ShiftResource extends Resource
 		return $form
 			->schema([
 				Forms\Components\Select::make('position')
+					->label('Позиція')
 					->required()
 					->options(positionController()->getNameList()),
+				Forms\Components\Fieldset::make('Дрони')
+					->schema([
+						Forms\Components\Repeater::make('drone_items')
+							->hiddenLabel()
+							->schema([
+								Forms\Components\Fieldset::make('')
+									->hiddenLabel()
+									->schema([
+										Forms\Components\TextInput::make('serial_number')
+											->label('Серійний номер'),
+									]),
+							])
+							->addActionLabel('Додати')
+							->columnSpanFull()
+							->collapsible(),
+					]),
 				Forms\Components\DatePicker::make('shift_start_at')
-					->required(),
+					->label('Дата початку зміни')
+					->required()
+					->timezone('Europe/Kyiv')
+					->format('Y-m-d'),
 			]);
 	}
 
@@ -48,8 +70,10 @@ class ShiftResource extends Resource
 	{
 		return $table
 			->columns([
-				Tables\Columns\TextColumn::make('name'),
-				Tables\Columns\TextColumn::make('drones'),
+				Tables\Columns\TextColumn::make('name')->label('Назва'),
+				Tables\Columns\TextColumn::make('position')->label('Позиція'),
+				Tables\Columns\TextColumn::make('shift_start_at')->label('Дата початку'),
+
 			])
 			->filters([
 				//
@@ -65,9 +89,7 @@ class ShiftResource extends Resource
 			]);
 	}
 
-	/**
-	 * @return array|\class-string[]|RelationGroup[]|\Filament\Resources\RelationManagers\RelationManagerConfiguration[]
-	 */
+	/*** @return array|class-string[]|RelationGroup[]|RelationManagerConfiguration[] */
 	public static function getRelations(): array
 	{
 		return [
@@ -75,9 +97,7 @@ class ShiftResource extends Resource
 		];
 	}
 
-	/**
-	 * @return array|\Filament\Resources\Pages\PageRegistration[]
-	 */
+	/*** @return array|PageRegistration[] */
 	public static function getPages(): array
 	{
 		return [

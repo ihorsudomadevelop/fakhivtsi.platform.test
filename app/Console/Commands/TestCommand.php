@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Flight;
 use Illuminate\Console\Command;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -26,8 +25,9 @@ class TestCommand extends Command
 
 	/*** Execute the console command. */
 	#[NoReturn]
-	public function handle()
+	public function handle(): void
 	{
-		dd(flightController()->getLastFlightNumber());
+		$lastFlightNumber = flightController()->getLastFlightNumber(2);
+		echo $lastFlightNumber > 0 ? $lastFlightNumber + 1 : 1;
 	}
 }

@@ -3,7 +3,6 @@
 namespace App\ModelControllers;
 
 use App\ModelControllers\Repositories\FlightRepository;
-use App\Models\Flight;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -25,10 +24,13 @@ class FlightController
 		$this->repo = $repo;
 	}
 
-	/*** @return int */
-	public function getLastFlightNumber(): int
+	/**
+	 * @param int $positionId
+	 * @return int
+	 */
+	public function getLastFlightNumber(int $positionId): int
 	{
-		return $this->repo->getLastFlightNumber();
+		return $this->repo->getLastFlightNumber($positionId);
 	}
 
 	/**

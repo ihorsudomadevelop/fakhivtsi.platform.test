@@ -3,6 +3,7 @@
 namespace App\ModelControllers;
 
 use App\ModelControllers\Repositories\PositionRepository;
+use App\Models\Position;
 
 /**
  * Class PositionController
@@ -21,6 +22,15 @@ class PositionController
 	public function __construct(PositionRepository $repo)
 	{
 		$this->repo = $repo;
+	}
+
+	/**
+	 * @param int $id
+	 * @return Position
+	 */
+	public function findById(int $id): Position
+	{
+		return $this->repo->findById($id);
 	}
 
 	/*** @return array */

@@ -22,24 +22,56 @@ class CreateFlight extends CreateRecord
 	 */
 	protected function handleRecordCreation(array $data): Flight
 	{
-		try {
-			$flightNumber = flightController()->getLastFlightNumber();
-			if ($flightNumber !== 1) {
-				$flightNumber += 1;
-			}
-		} catch (Throwable) {
-			$flightNumber = 1;
-		}
-		$data['date']                = now()->format('Y-m-d');
-		$data['call_sign']           = 'Фахівці';
-		$data['flight_number']       = $flightNumber;
-		$data['drone_serial_number'] = '-';
-		$ammunitionData              = [];
-		foreach ($data['ammunition_items'] as $ammunitionItem) {
-			$ammunitionData[] = ['title' => $ammunitionItem['ammunition'], 'quantity' => $ammunitionItem['quantity']];
-		}
-		$data['ammunition'] = $ammunitionData;
-		$data['pilot']      = 'Айтішнік';
+		$position     = positionController()->findById($data['position']);
+		$flightNumber = $this->getNextFlightNumber($position->id);
+		$data         = array_merge($data, [
+			'date'                => now()->format('Y-m-d'),
+			'call_sign'           => 'Фахівці',
+			'flight_number'       => $flightNumber,
+			'drone_serial_number' => '-',
+			'ammunition'          => $this->formatAmmunition($data['ammunition_items'] ?? []),
+			'pilot'               => 'Айтішнік',
+		]);
 		return static::getModel()::create($data);
+	}
+
+	/*** @return string */
+	protected function getRedirectUrl(): string
+	{
+		return $this->getResource()::getUrl('index');
+	}
+
+	/*** @return string */
+	protected function getCreatedRedirectUrl(): string
+	{
+		return $this->getResource()::getUrl('index');
+	}
+
+	/**
+	 * @param int $positionId
+	 * @return int
+	 */
+	protected function getNextFlightNumber(int $positionId): int
+	{
+		try {
+			$lastFlightNumber = flightController()->getLastFlightNumber($positionId);
+			return $lastFlightNumber > 0 ? $lastFlightNumber + 1 : 1;
+		} catch (Throwable) {
+			return 1;
+		}
+	}
+
+	/**
+	 * @param array $items
+	 * @return array
+	 */
+	protected function formatAmmunition(array $items): array
+	{
+		return array_map(function($item) {
+			return [
+				'title'    => $item['ammunition'] ?? '-',
+				'quantity' => $item['quantity'] ?? 0,
+			];
+		}, $items);
 	}
 }
