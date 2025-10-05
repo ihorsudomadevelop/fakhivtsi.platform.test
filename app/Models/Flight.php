@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class Flight
  * @property string      date
  * @property string      call_sign
- * @property string      position
+ * @property integer     position_id
  * @property integer     flight_number
  * @property string      drone_serial_number
  * @property string      target
@@ -33,7 +33,7 @@ class Flight extends Model
 	protected $fillable = [
 		'date',
 		'call_sign',
-		'position',
+		'position_id',
 		'flight_number',
 		'drone_serial_number',
 		'target',

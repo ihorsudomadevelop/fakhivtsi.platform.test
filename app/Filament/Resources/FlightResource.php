@@ -24,13 +24,10 @@ class FlightResource extends Resource
 {
 	/*** @var string|NULL */
 	protected static ?string $model = Flight::class;
-
 	/*** @var string|NULL */
 	protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
 	/*** @var string|NULL */
 	protected static ?string $navigationLabel = 'Польоти';
-
 
 	/**
 	 * @param Form $form
@@ -103,13 +100,11 @@ class FlightResource extends Resource
 	public static function table(Table $table): Table
 	{
 		$actions     = [
-			//			Tables\Actions\ViewAction::make()
-			//				->form([
-			//					Forms\Components\TextInput::make('position'),
-			//					Forms\Components\TextInput::make('flight_number'),
-			//					Forms\Components\TextInput::make('drone_serial_number'),
-			//					Forms\Components\TextInput::make('coordinates'),
-			//				]),
+			Tables\Actions\ViewAction::make()
+				->form([
+					Forms\Components\TextInput::make('flight_number'),
+					Forms\Components\TextInput::make('coordinates'),
+				]),
 		];
 		$bulkActions = [];
 		if (auth()->user()->isPremium()) {
@@ -133,12 +128,16 @@ class FlightResource extends Resource
 		return $table
 			->columns([
 				Tables\Columns\TextColumn::make('date')->label('Дата'),
-				Tables\Columns\TextColumn::make('position')->label('Позиція'),
+				Tables\Columns\TextColumn::make('position')
+					->label('Позиція')
+					->formatStateUsing(function(Flight $record): string {
+						return positionController()->findById($record->position_id)->name;
+					})
+					->getStateUsing(fn() => 'Активна'),
 				Tables\Columns\TextColumn::make('flight_number')->label('Номер вильоту'),
 				Tables\Columns\TextColumn::make('drone_serial_number')->label('СН дрону'),
 				Tables\Columns\TextColumn::make('target')->label('Ціль'),
-				Tables\Columns\TextColumn::make('ammunition')->label(''),
-			])
+			])->recordUrl(NULL)
 			->filters([
 			])
 			->actions($actions)

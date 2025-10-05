@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PositionResource\Pages;
 use App\Filament\Resources\PositionResource\RelationManagers;
 use App\Models\Position;
+use App\ObjectValues\PositionStatus;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\PageRegistration;
@@ -22,9 +23,10 @@ class PositionResource extends Resource
 {
 	/*** @var string|NULL */
 	protected static ?string $model = Position::class;
-
 	/*** @var string|NULL */
 	protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+	/*** @var string|NULL */
+	protected static ?string $navigationLabel = 'Позиції';
 
 	/**
 	 * @param Form $form
@@ -37,6 +39,9 @@ class PositionResource extends Resource
 				Forms\Components\TextInput::make('name')
 					->required()
 					->maxLength(50),
+				Forms\Components\Select::make('status')
+					->options(PositionStatus::getList())
+					->default(PositionStatus::ACTIVE),
 			]);
 	}
 
@@ -85,14 +90,14 @@ class PositionResource extends Resource
 		];
 	}
 
-//	use Filament\Pages\Actions\Action;
-//
-//	protected function getActions(): array
-//	{
-//		return [
-//			Action::make('settings')
-//				->label('Settings')
-//				->action('openSettingsModal'),
-//		];
-//	}
+	//	use Filament\Pages\Actions\Action;
+	//
+	//	protected function getActions(): array
+	//	{
+	//		return [
+	//			Action::make('settings')
+	//				->label('Settings')
+	//				->action('openSettingsModal'),
+	//		];
+	//	}
 }

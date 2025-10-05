@@ -19,9 +19,16 @@ class PositionRepository
 		return Position::where('id', '=', $id)->first();
 	}
 
-	/*** @return array */
-	public function getNameList(): array
+	/**
+	 * @param bool $withoutIdKey
+	 * @return array
+	 */
+	public function getNameList(bool $withoutIdKey = FALSE): array
 	{
-		return Position::all()->pluck('name', 'id')->toArray();
+		$key = 'id';
+		if ($withoutIdKey) {
+			$key = 'name';
+		}
+		return Position::all()->pluck('name', $key)->toArray();
 	}
 }

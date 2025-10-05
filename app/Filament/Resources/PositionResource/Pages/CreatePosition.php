@@ -3,10 +3,26 @@
 namespace App\Filament\Resources\PositionResource\Pages;
 
 use App\Filament\Resources\PositionResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
+/**
+ * Class CreatePosition
+ * @package App\Filament\Resources\PositionResource\Pages
+ */
 class CreatePosition extends CreateRecord
 {
-    protected static string $resource = PositionResource::class;
+	/*** @var string */
+	protected static string $resource = PositionResource::class;
+
+	/*** @return string */
+	protected function getRedirectUrl(): string
+	{
+		return $this->getResource()::getUrl('index');
+	}
+
+	/*** @return string */
+	protected function getCreatedRedirectUrl(): string
+	{
+		return $this->getResource()::getUrl('index');
+	}
 }

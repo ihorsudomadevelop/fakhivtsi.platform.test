@@ -33,9 +33,12 @@ class PositionController
 		return $this->repo->findById($id);
 	}
 
-	/*** @return array */
-	public function getNameList(): array
+	/**
+	 * @param bool $withoutIdKey
+	 * @return array
+	 */
+	public function getNameList(bool $withoutIdKey = FALSE): array
 	{
-		return $this->repo->getNameList();
+		return $this->repo->getNameList($withoutIdKey);
 	}
 }

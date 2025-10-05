@@ -4,15 +4,21 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ShiftResource\Pages;
 use App\Filament\Resources\ShiftResource\RelationManagers;
+use App\Models\Position;
 use App\Models\Shift;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\Tabs\Tab;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Resources\RelationManagers\RelationManagerConfiguration;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class ShiftResource
@@ -22,9 +28,10 @@ class ShiftResource extends Resource
 {
 	/*** @var string|NULL */
 	protected static ?string $model = Shift::class;
-
 	/*** @var string|NULL */
 	protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+	/*** @var string|NULL */
+	protected static ?string $navigationLabel = 'Зміни (Виїзди)';
 
 	/**
 	 * @param Form $form
@@ -34,10 +41,15 @@ class ShiftResource extends Resource
 	{
 		return $form
 			->schema([
+				Forms\Components\TextInput::make('name')
+					->label('Назва (опціонально)'),
 				Forms\Components\Select::make('position')
 					->label('Позиція')
 					->required()
-					->options(positionController()->getNameList()),
+					->options(positionController()->getNameList(TRUE)),
+				Forms\Components\TextInput::make('crew')
+					->label('Екіпаж')
+					->required(),
 				Forms\Components\Fieldset::make('Дрони')
 					->schema([
 						Forms\Components\Repeater::make('drone_items')
@@ -58,7 +70,8 @@ class ShiftResource extends Resource
 					->label('Дата початку зміни')
 					->required()
 					->timezone('Europe/Kyiv')
-					->format('Y-m-d'),
+					->format('Y-m-d')
+					->default(now()->format('Y-m-d')),
 			]);
 	}
 
@@ -68,20 +81,29 @@ class ShiftResource extends Resource
 	 */
 	public static function table(Table $table): Table
 	{
+		$actions = [
+			Tables\Actions\ViewAction::make()
+				->form([
+					Forms\Components\TextInput::make('position'),
+					Forms\Components\TextInput::make('crew'),
+				]),
+		];
+		if (isRoleAdmin()) {
+			$actions[] = Tables\Actions\EditAction::make();
+			$actions[] = Tables\Actions\DeleteAction::make();
+		} else if (isRoleOwner()) {
+			$actions[] = Tables\Actions\EditAction::make();
+		}
 		return $table
 			->columns([
 				Tables\Columns\TextColumn::make('name')->label('Назва'),
 				Tables\Columns\TextColumn::make('position')->label('Позиція'),
+				Tables\Columns\TextColumn::make('crew')->label('Екіпаж'),
 				Tables\Columns\TextColumn::make('shift_start_at')->label('Дата початку'),
-
-			])
+			])->recordUrl(NULL)
 			->filters([
-				//
 			])
-			->actions([
-				Tables\Actions\EditAction::make(),
-				Tables\Actions\DeleteAction::make(),
-			])
+			->actions($actions)
 			->bulkActions([
 				Tables\Actions\BulkActionGroup::make([
 					Tables\Actions\DeleteBulkAction::make(),
@@ -93,7 +115,6 @@ class ShiftResource extends Resource
 	public static function getRelations(): array
 	{
 		return [
-			//
 		];
 	}
 
@@ -105,5 +126,48 @@ class ShiftResource extends Resource
 			'create' => Pages\CreateShift::route('/create'),
 			'edit'   => Pages\EditShift::route('/{record}/edit'),
 		];
+	}
+
+	/*** @return Builder */
+	public static function getEloquentQuery(): Builder
+	{
+		$query = Shift::query();
+		if (isRoleAdmin()) {
+			return $query;
+		}
+		return $query->where('user_id', '=', auth()->id());
+	}
+
+	/*** @return bool */
+	public static function canCreate(): bool
+	{
+		if (empty(Position::all())) {
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	/**
+	 * @param Infolist $infolist
+	 * @return Infolist
+	 */
+	public static function infolist(Infolist $infolist): Infolist
+	{
+		return $infolist
+			->schema([
+				Tabs::make('Tabs')
+					->tabs([
+						Tab::make('Details')
+							->schema([
+								TextEntry::make('name')
+								->label('Назва'),
+							]),
+						Tab::make('Logs')
+							->badge(5) // Example badge
+							->schema([
+								// Fields for the activity tab
+							]),
+					]),
+			]);
 	}
 }

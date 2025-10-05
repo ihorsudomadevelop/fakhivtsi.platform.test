@@ -19,7 +19,9 @@ class Shift extends Model
 	 * @var array<int, string>
 	 */
 	protected $fillable = [
+		'user_id',
 		'position',
+		'crew',
 		'drones',
 		'shift_start_at',
 	];
