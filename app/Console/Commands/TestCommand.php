@@ -2,6 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Flight;
+use App\Models\Position;
+use App\Models\Shift;
+use App\ObjectValues\ShiftStatus;
 use Illuminate\Console\Command;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -27,7 +31,10 @@ class TestCommand extends Command
 	#[NoReturn]
 	public function handle(): void
 	{
-		$lastFlightNumber = flightController()->getLastFlightNumber(2);
-		echo $lastFlightNumber > 0 ? $lastFlightNumber + 1 : 1;
+		dd(Position::all());
+		//dd(Shift::query()->where('user_id', '=', 1)->where('status', '=', ShiftStatus::ACTIVE)->first());
+		//dd($query = Flight::query()->where('user_id', '=', auth()->id())->);
+		//$lastFlightNumber = flightController()->getLastFlightNumber(2);
+		//echo $lastFlightNumber > 0 ? $lastFlightNumber + 1 : 1;
 	}
 }

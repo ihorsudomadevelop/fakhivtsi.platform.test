@@ -46,7 +46,7 @@ class ShiftResource extends Resource
 				Forms\Components\Select::make('position')
 					->label('Позиція')
 					->required()
-					->options(positionController()->getNameList(TRUE)),
+					->options(positionController()->getNameList()),
 				Forms\Components\TextInput::make('crew')
 					->label('Екіпаж')
 					->required(),

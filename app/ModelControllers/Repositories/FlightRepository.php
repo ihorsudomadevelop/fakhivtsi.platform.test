@@ -12,12 +12,12 @@ use Illuminate\Database\Eloquent\Collection;
 class FlightRepository
 {
 	/**
-	 * @param int $positionId
+	 * @param int $shiftId
 	 * @return int
 	 */
-	public function getLastFlightNumber(int $positionId): int
+	public function getLastFlightNumber(int $shiftId): int
 	{
-		$lastDateFlightModel = Flight::where('position_id', '=', $positionId)
+		$lastDateFlightModel = Flight::where('shift_id', '=', $shiftId)
 			->latest('date')
 			->orderByDesc('flight_number')
 			->first();
@@ -29,12 +29,16 @@ class FlightRepository
 	}
 
 	/**
+	 * @param int         $shiftId
 	 * @param string|NULL $date
 	 * @return Collection|array
 	 */
-	public function getForDay(?string $date = NULL): Collection|array
+	public function getForDay(int $shiftId, ?string $date = NULL): Collection|array
 	{
-		$date ??= Flight::query()->latest('date')->value('date');
+		//TODO get last shift position (if Position A have 3 flights and Poistion B have 0, choose A)
+		//Night shifts consist of 2 dates !!!
+		$query = Flight::query()->where('shift_id', '=', $shiftId)->latest('date')->orderBy('flight_number', 'desc');
+		$date  ??= $query->value('date');
 		return Flight::query()
 			->where('date', $date)
 			->orderBy('flight_number')

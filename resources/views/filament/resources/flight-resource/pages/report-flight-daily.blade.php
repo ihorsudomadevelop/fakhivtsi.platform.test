@@ -15,7 +15,9 @@
 			<br>
 			Статус: {{ $flight->target_status }}
 			<br>
-			БК: {{ $flight->ammunition }}
+			БК: @foreach($flight->getAmmunition() as $ammunition)
+				{{ $ammunition['title'] }} - {{ $ammunition['quantity'] }}шт
+			@endforeach
 		</div>
 	@endforeach
 </div>

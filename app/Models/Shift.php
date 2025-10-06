@@ -20,7 +20,7 @@ class Shift extends Model
 	 */
 	protected $fillable = [
 		'user_id',
-		'position',
+		'position_id',
 		'crew',
 		'drones',
 		'shift_start_at',

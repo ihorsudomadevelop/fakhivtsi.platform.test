@@ -25,20 +25,21 @@ class FlightController
 	}
 
 	/**
-	 * @param int $positionId
+	 * @param int $shiftId
 	 * @return int
 	 */
-	public function getLastFlightNumber(int $positionId): int
+	public function getLastFlightNumber(int $shiftId): int
 	{
-		return $this->repo->getLastFlightNumber($positionId);
+		return $this->repo->getLastFlightNumber($shiftId);
 	}
 
 	/**
+	 * @param int         $shiftId
 	 * @param string|NULL $date
 	 * @return Collection|array
 	 */
-	public function getForDay(?string $date = NULL): Collection|array
+	public function getForDay(int $shiftId, ?string $date = NULL): Collection|array
 	{
-		return $this->repo->getForDay($date);
+		return $this->repo->getForDay($shiftId, $date);
 	}
 }

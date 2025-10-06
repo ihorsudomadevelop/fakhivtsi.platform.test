@@ -14,6 +14,18 @@ class CreatePosition extends CreateRecord
 	/*** @var string */
 	protected static string $resource = PositionResource::class;
 
+	/*** @return array|string[] */
+	public function getBreadcrumbs(): array
+	{
+		return [];
+	}
+
+	/*** @return string */
+	public function getTitle(): string
+	{
+		return 'Нова позиція';
+	}
+
 	/*** @return string */
 	protected function getRedirectUrl(): string
 	{

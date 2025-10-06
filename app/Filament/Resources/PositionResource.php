@@ -38,10 +38,12 @@ class PositionResource extends Resource
 			->schema([
 				Forms\Components\TextInput::make('name')
 					->required()
-					->maxLength(50),
+					->maxLength(50)
+					->label('Назва'),
 				Forms\Components\Select::make('status')
 					->options(PositionStatus::getList())
-					->default(PositionStatus::ACTIVE),
+					->default(PositionStatus::ACTIVE)
+					->label('Статус'),
 			]);
 	}
 

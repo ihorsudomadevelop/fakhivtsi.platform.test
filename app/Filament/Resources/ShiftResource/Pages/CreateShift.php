@@ -15,6 +15,18 @@ class CreateShift extends CreateRecord
 	/*** @var string */
 	protected static string $resource = ShiftResource::class;
 
+	/*** @return array|string[] */
+	public function getBreadcrumbs(): array
+	{
+		return [];
+	}
+
+	/*** @return string */
+	public function getTitle(): string
+	{
+		return 'Нова зміна';
+	}
+
 	/**
 	 * @param array $data
 	 * @return Shift

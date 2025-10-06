@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\FlightResource\Pages;
 
 use App\Filament\Resources\FlightResource;
+use App\Models\Shift;
+use App\ObjectValues\ShiftStatus;
 use Carbon\Carbon;
 use Filament\Actions;
 use Filament\Actions\Action;
@@ -20,13 +22,21 @@ class ListFlights extends ListRecords
 {
 	/*** @var string */
 	protected static string $resource = FlightResource::class;
+	/*** @var string|NULL */
+	protected static ?string $title = 'Польоти';
+
+	/*** @return array|string[] */
+	public function getBreadcrumbs(): array
+	{
+		return [];
+	}
 
 	/*** @return array|Actions\Action[]|Actions\ActionGroup[] */
 	protected function getHeaderActions(): array
 	{
 		$actions = [];
 		if (auth()->user()->isPremium()) {
-			$flights = flightController()->getForDay();
+			$flights = flightController()->getForDay(Shift::query()->where('user_id', '=', auth()->id())->value('id'));
 			if ( ! empty($flights->items)) {
 				$actions[] = Action::make('report_daily')
 					->label('Звіт за день')
@@ -48,7 +58,7 @@ class ListFlights extends ListRecords
 					->modalCancelActionLabel('Close');
 			}
 		}
-		if (isRoleAdmin()) {
+		if ((isRoleAdmin() || isRoleOwner()) && (Shift::query()->where('user_id', '=', auth()->id())->where('status', '=', ShiftStatus::ACTIVE)->first() !== NULL)) {
 			$actions[] = Actions\CreateAction::make()
 				->label('Додати')
 				->icon('heroicon-o-plus');

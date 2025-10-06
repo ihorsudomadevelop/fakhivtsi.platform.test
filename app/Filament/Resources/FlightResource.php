@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\FlightResource\Pages;
 use App\Models\Flight;
+use App\Models\Shift;
+use App\ObjectValues\ShiftStatus;
 use App\ObjectValues\Target;
 use App\ObjectValues\TargetStatus;
 use Filament\Forms;
@@ -37,10 +39,10 @@ class FlightResource extends Resource
 	{
 		return $form
 			->schema([
-				Forms\Components\Select::make('position')
-					->label('Позиція')
-					->required()
-					->options(positionController()->getNameList()),
+				//				Forms\Components\Select::make('position')
+				//					->label('Позиція')
+				//					->required()
+				//					->options(positionController()->getNameList()),
 				Forms\Components\Select::make('target')
 					->label('Ціль')
 					->required()
@@ -160,5 +162,14 @@ class FlightResource extends Resource
 			'edit'   => Pages\EditFlight::route('/{record}/edit'),
 			'report' => Pages\ReportFlight::route('/{record}/report'),
 		];
+	}
+
+	/*** @return bool */
+	public static function canCreate(): bool
+	{
+		if (Shift::query()->where('user_id', '=', auth()->id())->where('status', '=', ShiftStatus::ACTIVE)->first() === NULL) {
+			return FALSE;
+		}
+		return TRUE;
 	}
 }
