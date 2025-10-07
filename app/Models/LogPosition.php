@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Position
- * @property string name
+ * Class LogPosition
  * @package App\Models
  */
-class Position extends Model
+class LogPosition extends Model
 {
 	use HasFactory;
 
@@ -19,7 +18,11 @@ class Position extends Model
 	 * @var array<int, string>
 	 */
 	protected $fillable = [
-		'name',
-		'status',
+		'user_id',
+		'action',
+		'field',
+		'prev_value',
+		'new_value',
+		'date',
 	];
 }

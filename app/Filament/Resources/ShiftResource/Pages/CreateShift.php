@@ -4,6 +4,8 @@ namespace App\Filament\Resources\ShiftResource\Pages;
 
 use App\Filament\Resources\ShiftResource;
 use App\Models\Shift;
+use App\Traits\LogShiftTrait;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 
 /**
@@ -12,8 +14,12 @@ use Filament\Resources\Pages\CreateRecord;
  */
 class CreateShift extends CreateRecord
 {
+	use LogShiftTrait;
+
 	/*** @var string */
 	protected static string $resource = ShiftResource::class;
+	/*** @var bool */
+	protected static bool $canCreateAnother = FALSE;
 
 	/*** @return array|string[] */
 	public function getBreadcrumbs(): array
@@ -27,18 +33,18 @@ class CreateShift extends CreateRecord
 		return 'Нова зміна';
 	}
 
-	/**
-	 * @param array $data
-	 * @return Shift
-	 */
-	protected function handleRecordCreation(array $data): Shift
+	/*** @return Action */
+	protected function getCreateFormAction(): Action
 	{
-		$data['drones']  = array_map(
-			fn($drone) => ['serial_number' => $drone['serial_number']],
-			$data['drone_items']
-		);
-		$data['user_id'] = auth()->id();
-		return static::getModel()::create($data);
+		return parent::getCreateFormAction()
+			->label('Створити');
+	}
+
+	/*** @return Action */
+	protected function getCancelFormAction(): Action
+	{
+		return parent::getCancelFormAction()
+			->label('Відхилити');
 	}
 
 	/*** @return string */
@@ -51,5 +57,27 @@ class CreateShift extends CreateRecord
 	protected function getCreatedRedirectUrl(): string
 	{
 		return $this->getResource()::getUrl('index');
+	}
+
+	/**
+	 * @param array $data
+	 * @return Shift
+	 */
+	protected function handleRecordCreation(array $data): Shift
+	{
+		$data['drones']           = array_map(
+			fn($drone) => ['serial_number' => $drone['serial_number']],
+			$data['drone_items']
+		);
+		$data['user_id']          = auth()->id();
+		$data['watch_time_start'] = '-';
+		$data['watch_time_end']   = '-';
+		return static::getModel()::create($data);
+	}
+
+	/*** @return void */
+	protected function afterCreate(): void
+	{
+		$this->createLogShift($this->record->id, 'create');
 	}
 }

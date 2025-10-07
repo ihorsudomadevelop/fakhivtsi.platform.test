@@ -9,7 +9,7 @@ namespace App\ObjectValues;
 class ShiftStatus
 {
 	/*** @var string */
-	public const ACTIVE = 'Активно';
+	public const ACTIVE = 'Активна';
 	/*** @var string */
-	public const COMPLETED = 'Завершено';
+	public const COMPLETED = 'Завершена';
 }

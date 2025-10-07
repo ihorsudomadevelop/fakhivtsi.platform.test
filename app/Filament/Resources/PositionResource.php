@@ -53,18 +53,22 @@ class PositionResource extends Resource
 	 */
 	public static function table(Table $table): Table
 	{
-		$actions = [];
+		$actions = [
+			Tables\Actions\ViewAction::make()
+				->form([
+					Forms\Components\TextInput::make('name'),
+					Forms\Components\TextInput::make('status'),
+				]),
+		];
 		if (isRoleAdmin()) {
-			$actions = [
-				Tables\Actions\EditAction::make(),
-				Tables\Actions\DeleteAction::make(),
-			];
+			$actions[] = Tables\Actions\EditAction::make();
+			$actions[] = Tables\Actions\DeleteAction::make();
 		}
 		return $table
 			->columns([
 				Tables\Columns\TextColumn::make('name'),
 				Tables\Columns\TextColumn::make('status'),
-			])
+			])->recordUrl(NULL)
 			->filters([
 			])
 			->actions($actions)
@@ -72,7 +76,8 @@ class PositionResource extends Resource
 				Tables\Actions\BulkActionGroup::make([
 					Tables\Actions\DeleteBulkAction::make(),
 				]),
-			]);
+			])
+			->emptyStateHeading('Записів не знайдено');
 	}
 
 	/*** @return array|\class-string[]|RelationGroup[]|RelationManagerConfiguration[] */

@@ -13,6 +13,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\View\View;
+use Throwable;
 
 /**
  * Class ListFlights
@@ -36,8 +37,12 @@ class ListFlights extends ListRecords
 	{
 		$actions = [];
 		if (auth()->user()->isPremium()) {
-			$flights = flightController()->getForDay(Shift::query()->where('user_id', '=', auth()->id())->value('id'));
-			if ( ! empty($flights->items)) {
+			try {
+				$flights = flightController()->getForDay(Shift::query()->where('user_id', '=', auth()->id())->value('id'));
+			} catch (Throwable) {
+				$flights = NULL;
+			}
+			if ($flights !== NULL && ! empty($flights->items)) {
 				$actions[] = Action::make('report_daily')
 					->label('Звіт за день')
 					->icon('heroicon-o-rectangle-stack')

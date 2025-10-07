@@ -143,7 +143,8 @@ class FlightResource extends Resource
 			->filters([
 			])
 			->actions($actions)
-			->bulkActions($bulkActions);
+			->bulkActions($bulkActions)
+			->emptyStateHeading('Записів не знайдено');
 	}
 
 	/*** @return array|class-string[]|RelationGroup[]|RelationManagerConfiguration[] */
